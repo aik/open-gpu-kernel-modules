@@ -426,7 +426,7 @@ nvlink_drivers_exit(void)
 
 
 #if defined(NVCPU_PPC64LE)
-    ibmnpu_exit();
+    //ibmnpu_exit();
 #endif
 
     nvlink_core_exit();
@@ -446,7 +446,7 @@ nvlink_drivers_init(void)
         return rc;
     }
 
-#if defined(NVCPU_PPC64LE)
+#if 0//defined(NVCPU_PPC64LE)
     rc = ibmnpu_init();
     if (rc < 0)
     {
@@ -463,7 +463,7 @@ nvlink_drivers_init(void)
     {
         nv_printf(NV_DBG_INFO, "NVRM: NVSwitch init failed.\n");
 #if defined(NVCPU_PPC64LE)
-        ibmnpu_exit();
+        //ibmnpu_exit();
 #endif
         nvlink_core_exit();
     }
@@ -1220,6 +1220,7 @@ static int nv_start_device(nv_state_t *nv, nvidia_stack_t *sp)
         power_ref = NV_TRUE;
     }
 
+#if 0
     rc = nv_init_ibmnpu_devices(nv);
     if (rc != 0)
     {
@@ -1228,7 +1229,7 @@ static int nv_start_device(nv_state_t *nv, nvidia_stack_t *sp)
             nvl->minor_num);
         goto failed;
     }
-
+#endif
     if (!(nv->flags & NV_FLAG_PERSISTENT_SW_STATE))
     {
         rc = nv_dev_alloc_stacks(nvl);
@@ -1417,7 +1418,7 @@ failed:
 
     nv_dev_free_stacks(nvl);
 
-    nv_unregister_ibmnpu_devices(nv);
+    //nv_unregister_ibmnpu_devices(nv);
 
     if (power_ref)
     {
@@ -1756,7 +1757,7 @@ static void nv_stop_device(nv_state_t *nv, nvidia_stack_t *sp)
     /* leave INIT flag alone so we don't reinit every time */
     nv->flags &= ~NV_FLAG_OPEN;
 
-    nv_unregister_ibmnpu_devices(nv);
+    //nv_unregister_ibmnpu_devices(nv);
 
     if (!(nv->flags & NV_FLAG_PERSISTENT_SW_STATE))
     {
@@ -5544,7 +5545,7 @@ NvU32 NV_API_CALL nv_get_os_type(void)
 void NV_API_CALL nv_flush_coherent_cpu_cache_range(nv_state_t *nv, NvU64 cpu_virtual, NvU64 size)
 {
 #if NVCPU_IS_PPC64LE
-    return nv_ibmnpu_cache_flush_range(nv, cpu_virtual, size);
+//    return nv_ibmnpu_cache_flush_range(nv, cpu_virtual, size);
 #elif NVCPU_IS_AARCH64
 
     NvU64 va, cbsize;

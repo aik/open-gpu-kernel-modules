@@ -24,7 +24,7 @@
 #include "nv-pci-table.h"
 #include "nv-pci-types.h"
 #include "nv-pci.h"
-#include "nv-ibmnpu.h"
+//#include "nv-ibmnpu.h"
 #include "nv-frontend.h"
 #include "nv-msi.h"
 #include "nv-hypervisor.h"
@@ -496,13 +496,13 @@ next_bar:
     NV_ATOMIC_SET(nvl->numa_info.status, NV_IOCTL_NUMA_STATUS_DISABLED);
     nvl->numa_info.node_id = NUMA_NO_NODE;
 
-    nv_init_ibmnpu_info(nv);
-
 
 
 
 
 #if defined(NVCPU_PPC64LE)
+    //nv_init_ibmnpu_info(nv);
+
     // Use HW NUMA support as a proxy for ATS support. This is true in the only
     // PPC64LE platform where ATS is currently supported (IBM P9).
     nv_ats_supported &= nv_platform_supports_numa(nvl);
@@ -621,7 +621,7 @@ err_zero_dev:
     rm_free_private_state(sp, nv);
 err_not_supported:
     nv_ats_supported = prev_nv_ats_supported;
-    nv_destroy_ibmnpu_info(nv);
+//    nv_destroy_ibmnpu_info(nv);
     nv_lock_destroy_locks(sp, nv);
     if (nvl != NULL)
     {
@@ -768,8 +768,8 @@ nv_pci_remove(struct pci_dev *pci_dev)
         nvl->sysfs_config_file = NULL;
     }
 
-    nv_unregister_ibmnpu_devices(nv);
-    nv_destroy_ibmnpu_info(nv);
+//    nv_unregister_ibmnpu_devices(nv);
+//    nv_destroy_ibmnpu_info(nv);
 
     if (NV_ATOMIC_READ(nvl->usage_count) == 0)
     {

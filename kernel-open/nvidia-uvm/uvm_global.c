@@ -124,7 +124,7 @@ NV_STATUS uvm_global_init(void)
         return status;
     }
 
-    uvm_ats_init(&platform_info);
+    //uvm_ats_init(&platform_info);
     g_uvm_global.num_simulated_devices = 0;
 
 

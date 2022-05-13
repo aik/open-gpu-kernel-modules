@@ -1431,7 +1431,7 @@ static NV_STATUS service_non_managed_fault(uvm_fault_buffer_entry_t *current_ent
 
     if (status != NV_ERR_INVALID_ADDRESS)
         return status;
-
+#if 0
     if (uvm_ats_can_service_faults(gpu_va_space, mm)) {
         // The VA isn't managed. See if ATS knows about it, unless it is a
         // duplicate and the previous fault was non-fatal so the page has
@@ -1441,7 +1441,9 @@ static NV_STATUS service_non_managed_fault(uvm_fault_buffer_entry_t *current_ent
         else
             status = NV_OK;
     }
-    else {
+    else
+#endif
+    {
         // If the VA block cannot be found, set the fatal fault flag,
         // unless it is a prefetch fault
         if (current_entry->fault_access_type == UVM_FAULT_ACCESS_TYPE_PREFETCH) {
@@ -1513,9 +1515,9 @@ static NV_STATUS service_fault_batch(uvm_gpu_t *gpu,
             // Fault on a different va_space, drop the lock of the old one...
             if (va_space != NULL) {
                 // TLB entries are invalidated per GPU VA space
-                status = uvm_ats_invalidate_tlbs(gpu_va_space, ats_invalidate, &batch_context->tracker);
-                if (status != NV_OK)
-                    goto fail;
+//                status = uvm_ats_invalidate_tlbs(gpu_va_space, ats_invalidate, &batch_context->tracker);
+//                if (status != NV_OK)
+//                    goto fail;
 
                 uvm_va_space_up_read(va_space);
                 uvm_va_space_mm_release_unlock(va_space, mm);
@@ -1631,11 +1633,13 @@ static NV_STATUS service_fault_batch(uvm_gpu_t *gpu,
 
     // Only clobber status if invalidate_status != NV_OK, since status may also
     // contain NV_WARN_MORE_PROCESSING_REQUIRED.
+#if 0
     if (va_space != NULL) {
         NV_STATUS invalidate_status = uvm_ats_invalidate_tlbs(gpu_va_space, ats_invalidate, &batch_context->tracker);
         if (invalidate_status != NV_OK)
             status = invalidate_status;
     }
+#endif
 
 fail:
     if (va_space != NULL) {

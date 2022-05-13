@@ -713,7 +713,7 @@ void uvm_ats_ibm_invalidate(uvm_va_space_t *va_space, NvU64 start, NvU64 end)
 #endif // UVM_ATS_IBM_SUPPORTED_IN_DRIVER()
 }
 
-
+#if 0
 /* Maximum number of nvlinks per npu */
 #define NV_MAX_LINKS 6
 
@@ -1244,7 +1244,7 @@ struct pci_dev *pnv_pci_get_npu_dev(struct pci_dev *gpdev, int index)
 	return npdev;
 }
 EXPORT_SYMBOL(pnv_pci_get_npu_dev);
-
+#endif
 
 #endif // UVM_ATS_IBM_SUPPORTED
 #endif // UVM_IBM_NPU_SUPPORTED

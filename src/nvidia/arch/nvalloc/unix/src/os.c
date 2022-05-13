@@ -4007,7 +4007,7 @@ osGetIbmnpuGenregInfo
     NvU64       *pSize
 )
 {
-    return nv_get_ibmnpu_genreg_info(pOsGpuInfo, pBase, pSize, NULL);
+    return NV_OK;//nv_get_ibmnpu_genreg_info(pOsGpuInfo, pBase, pSize, NULL);
 }
 
 /*
@@ -4023,7 +4023,7 @@ osGetIbmnpuRelaxedOrderingMode
     NvBool      *pMode
 )
 {
-    return nv_get_ibmnpu_relaxed_ordering_mode(pOsGpuInfo, pMode);
+    return NV_OK;//nv_get_ibmnpu_relaxed_ordering_mode(pOsGpuInfo, pMode);
 }
 
 /*
@@ -4037,7 +4037,7 @@ osWaitForIbmnpuRsync
     OS_GPU_INFO *pOsGpuInfo
 )
 {
-    nv_wait_for_ibmnpu_rsync(pOsGpuInfo);
+//    nv_wait_for_ibmnpu_rsync(pOsGpuInfo);
 }
 
 NvU32

@@ -1088,12 +1088,13 @@ static NV_STATUS init_parent_gpu(uvm_parent_gpu_t *parent_gpu,
         return status;
     }
 
+#if 0
     status = uvm_ats_add_gpu(parent_gpu);
     if (status != NV_OK) {
         UVM_ERR_PRINT("uvm_ats_add_gpu failed: %s, GPU %s\n", nvstatusToString(status), parent_gpu->name);
         return status;
     }
-
+#endif
     status = init_parent_procfs_files(parent_gpu);
     if (status != NV_OK) {
         UVM_ERR_PRINT("Failed to init parent procfs files: %s, GPU %s\n", nvstatusToString(status), parent_gpu->name);
@@ -1427,7 +1428,7 @@ static void deinit_parent_gpu(uvm_parent_gpu_t *parent_gpu)
 
     deinit_parent_procfs_files(parent_gpu);
 
-    uvm_ats_remove_gpu(parent_gpu);
+    //uvm_ats_remove_gpu(parent_gpu);
 
     UVM_ASSERT(atomic64_read(&parent_gpu->mapped_cpu_pages_size) == 0);
 

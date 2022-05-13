@@ -175,8 +175,9 @@ NV_STATUS uvm_va_space_create(struct inode *inode, struct file *filp)
                    UVM_LOCK_ORDER_VA_SPACE_READ_ACQUIRE_WRITE_RELEASE_LOCK);
     uvm_spin_lock_init(&va_space->va_space_mm.lock, UVM_LOCK_ORDER_LEAF);
     uvm_range_tree_init(&va_space->va_range_tree);
+#if 0
     uvm_ats_init_va_space(va_space);
-
+#endif
     // By default all struct files on the same inode share the same
     // address_space structure (the inode's) across all processes. This means
     // unmap_mapping_range would unmap virtual mappings across all processes on
@@ -1300,10 +1301,10 @@ static void destroy_gpu_va_space(uvm_gpu_va_space_t *gpu_va_space)
 
     // Note that this call may wait for faults to finish being serviced, which
     // means it may depend on the VA space lock and mmap_lock.
+#if 0
     uvm_ats_unregister_gpu_va_space(gpu_va_space);
-
     uvm_ats_unbind_gpu(gpu_va_space);
-
+#endif
 
     uvm_gpu_va_space_release(gpu_va_space);
 }
@@ -1383,10 +1384,11 @@ static NV_STATUS create_gpu_va_space(uvm_gpu_t *gpu,
         goto error;
     }
 
+#if 0
     status = uvm_ats_bind_gpu(gpu_va_space);
     if (status != NV_OK)
         goto error;
-
+#endif
     *out_gpu_va_space = gpu_va_space;
     return NV_OK;
 
@@ -1486,9 +1488,11 @@ NV_STATUS uvm_va_space_register_gpu_va_space(uvm_va_space_t *va_space,
     if (status != NV_OK)
         goto error_unlock;
 
+#if 0
     status = uvm_ats_register_gpu_va_space(gpu_va_space);
     if (status != NV_OK)
         goto error_unlock;
+#endif
 
     uvm_va_space_up_write(va_space);
     uvm_gpu_va_space_release_mmap_lock(mm);

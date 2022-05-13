@@ -203,12 +203,12 @@ static void uvm_va_space_mm_shutdown(uvm_va_space_t *va_space);
         // what is used here.
         return container_of(mn, uvm_va_space_t, va_space_mm.mmu_notifier);
     }
-
     static void uvm_mmu_notifier_release(struct mmu_notifier *mn, struct mm_struct *mm)
     {
         UVM_ENTRY_VOID(uvm_va_space_mm_shutdown(get_va_space(mn)));
     }
 
+#if 0
     static void uvm_mmu_notifier_invalidate_range_ats(struct mmu_notifier *mn,
                                                       struct mm_struct *mm,
                                                       unsigned long start,
@@ -235,15 +235,16 @@ static void uvm_va_space_mm_shutdown(uvm_va_space_t *va_space);
         UVM_ENTRY_VOID(uvm_ats_invalidate(get_va_space(mn), start, end));
     }
 
-    static struct mmu_notifier_ops uvm_mmu_notifier_ops_release =
-    {
-        .release = uvm_mmu_notifier_release,
-    };
-
     static struct mmu_notifier_ops uvm_mmu_notifier_ops_ats =
     {
         .release          = uvm_mmu_notifier_release,
         .invalidate_range = uvm_mmu_notifier_invalidate_range_ats,
+    };
+#endif
+
+    static struct mmu_notifier_ops uvm_mmu_notifier_ops_release =
+    {
+        .release = uvm_mmu_notifier_release,
     };
 
     static int uvm_mmu_notifier_register(uvm_va_space_mm_t *va_space_mm)
@@ -251,9 +252,9 @@ static void uvm_va_space_mm_shutdown(uvm_va_space_t *va_space);
         UVM_ASSERT(va_space_mm->mm);
         uvm_assert_mmap_lock_locked_write(va_space_mm->mm);
 
-        if (UVM_ATS_IBM_SUPPORTED_IN_DRIVER() && g_uvm_global.ats.enabled)
-            va_space_mm->mmu_notifier.ops = &uvm_mmu_notifier_ops_ats;
-        else
+//        if (UVM_ATS_IBM_SUPPORTED_IN_DRIVER() && g_uvm_global.ats.enabled)
+//            va_space_mm->mmu_notifier.ops = &uvm_mmu_notifier_ops_ats;
+//        else
             va_space_mm->mmu_notifier.ops = &uvm_mmu_notifier_ops_release;
 
         return __mmu_notifier_register(&va_space_mm->mmu_notifier, va_space_mm->mm);

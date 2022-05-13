@@ -520,7 +520,7 @@ static NV_STATUS service_non_managed_fault(uvm_gpu_va_space_t *gpu_va_space,
 {
     uvm_gpu_t *gpu = gpu_va_space->gpu;
     uvm_non_replayable_fault_buffer_info_t *non_replayable_faults = &gpu->parent->fault_buffer_info.non_replayable;
-    uvm_ats_fault_invalidate_t *ats_invalidate = &non_replayable_faults->ats_invalidate;
+//    uvm_ats_fault_invalidate_t *ats_invalidate = &non_replayable_faults->ats_invalidate;
     NV_STATUS status = lookup_status;
 
     UVM_ASSERT(!fault_entry->is_fatal);
@@ -537,6 +537,7 @@ static NV_STATUS service_non_managed_fault(uvm_gpu_va_space_t *gpu_va_space,
     if (status != NV_ERR_INVALID_ADDRESS)
         return status;
 
+#if 0
     if (uvm_ats_can_service_faults(gpu_va_space, mm)) {
         ats_invalidate->write_faults_in_batch = false;
 
@@ -550,7 +551,9 @@ static NV_STATUS service_non_managed_fault(uvm_gpu_va_space_t *gpu_va_space,
                                              &non_replayable_faults->fault_service_tracker);
         }
     }
-    else {
+    else
+#endif
+    {
         UVM_ASSERT(fault_entry->fault_access_type != UVM_FAULT_ACCESS_TYPE_PREFETCH);
         fault_entry->is_fatal = true;
         fault_entry->fatal_reason = uvm_tools_status_to_fatal_fault_reason(status);

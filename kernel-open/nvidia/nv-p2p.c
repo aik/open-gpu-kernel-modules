@@ -835,12 +835,12 @@ int nvidia_p2p_get_rsync_registers(
 )
 {
     nv_linux_state_t *nvl;
-    nv_state_t *nv;
+//    nv_state_t *nv;
     NV_STATUS status;
-    void *ptr = NULL;
-    NvU64 addr;
-    NvU64 size;
-    struct pci_dev *ibmnpu = NULL;
+//    void *ptr = NULL;
+//    NvU64 addr;
+//    NvU64 size;
+//    struct pci_dev *ibmnpu = NULL;
     NvU32 index = 0;
     NvU32 count = 0;
     nvidia_p2p_rsync_reg_info_t *info = NULL;
@@ -875,7 +875,7 @@ int nvidia_p2p_get_rsync_registers(
         UNLOCK_NV_LINUX_DEVICES();
         return -ENOMEM;
     }
-
+#if 0
     for (nvl = nv_linux_devices; nvl; nvl = nvl->next)
     {
         nv = NV_STATE_PTR(nvl);
@@ -904,7 +904,7 @@ int nvidia_p2p_get_rsync_registers(
 
         index++;
     }
-
+#endif
     UNLOCK_NV_LINUX_DEVICES();
 
     info->regs = regs;
