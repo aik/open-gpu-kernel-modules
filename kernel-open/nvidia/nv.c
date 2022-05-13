@@ -4547,19 +4547,19 @@ NvU64 NV_API_CALL nv_get_dma_start_address(
      * as the starting address for all DMA mappings.
      */
     saved_dma_mask = pci_dev->dma_mask;
-    if (pci_set_dma_mask(pci_dev, DMA_BIT_MASK(64)) != 0)
+    if (dma_set_mask(&pci_dev->dev, DMA_BIT_MASK(64)) != 0)
     {
         goto done;
     }
 
-    dma_addr = pci_map_single(pci_dev, NULL, 1, DMA_BIDIRECTIONAL);
-    if (pci_dma_mapping_error(pci_dev, dma_addr))
+    dma_addr = dma_map_single(&pci_dev->dev, NULL, 1, DMA_BIDIRECTIONAL);
+    if (dma_mapping_error(&pci_dev->dev, dma_addr))
     {
-        pci_set_dma_mask(pci_dev, saved_dma_mask);
+        dma_set_mask(&pci_dev->dev, saved_dma_mask);
         goto done;
     }
 
-    pci_unmap_single(pci_dev, dma_addr, 1, DMA_BIDIRECTIONAL);
+    dma_unmap_single(&pci_dev->dev, dma_addr, 1, DMA_BIDIRECTIONAL);
 
     /*
      * From IBM: "For IODA2, native DMA bypass or KVM TCE-based implementation
@@ -4591,7 +4591,7 @@ NvU64 NV_API_CALL nv_get_dma_start_address(
          */
         nv_printf(NV_DBG_WARNINGS,
             "NVRM: DMA window limited by platform\n");
-        pci_set_dma_mask(pci_dev, saved_dma_mask);
+        dma_set_mask(&pci_dev->dev, saved_dma_mask);
         goto done;
     }
     else if ((dma_addr & saved_dma_mask) != 0)
@@ -4610,7 +4610,7 @@ NvU64 NV_API_CALL nv_get_dma_start_address(
              */
             nv_printf(NV_DBG_WARNINGS,
                 "NVRM: DMA window limited by memory size\n");
-            pci_set_dma_mask(pci_dev, saved_dma_mask);
+            dma_set_mask(&pci_dev->dev, saved_dma_mask);
             goto done;
         }
     }
@@ -4911,15 +4911,15 @@ NV_STATUS NV_API_CALL nv_get_device_memory_config(
 {
     nv_linux_state_t *nvl = NV_GET_NVL_FROM_NV_STATE(nv);
     NV_STATUS status = NV_ERR_NOT_SUPPORTED;
-
+#if defined(NVCPU_PPC64LE)
+    nv_npu_numa_info_t *numa_info;
+#endif
     if (!nv_platform_supports_numa(nvl))
     {
         return NV_ERR_NOT_SUPPORTED;
     }
 
 #if defined(NVCPU_PPC64LE)
-    nv_npu_numa_info_t *numa_info;
-
     numa_info = &nvl->npu->numa_info;
 
     if (node_id != NULL)
@@ -4991,7 +4991,7 @@ NV_STATUS NV_API_CALL nv_get_nvlink_line_rate(
     NvU32      *linerate
 )
 {
-#if defined(NV_PNV_PCI_GET_NPU_DEV_PRESENT) && defined(NV_OF_GET_PROPERTY_PRESENT)
+#if defined(NV_OF_GET_PROPERTY_PRESENT)
 
     nv_linux_state_t *nvl;
     struct pci_dev   *npuDev;

@@ -32,6 +32,8 @@
 
 typedef struct nv_npu_numa_info
 {
+    NvS32 node_id;
+
     /*
      * 47-bit NVIDIA 'system physical address': the hypervisor real 56-bit
      * address with NVLink address compression scheme applied.

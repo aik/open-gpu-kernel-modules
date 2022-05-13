@@ -28,7 +28,7 @@
 #include "uvm_forward_decl.h"
 #include "uvm_hal_types.h"
 
-#if defined(NVCPU_PPC64LE) && defined(NV_PNV_PCI_GET_NPU_DEV_PRESENT)
+#if defined(NVCPU_PPC64LE)
     #include <asm/mmu.h>
     #if defined(NV_MAX_NPUS)
         #define UVM_IBM_NPU_SUPPORTED() 1
@@ -262,5 +262,8 @@ static void uvm_ats_ibm_unbind_gpu(uvm_gpu_va_space_t *gpu_va_space)
 {
 
 }
+
+struct pci_dev *pnv_pci_get_gpu_dev(struct pci_dev *npdev);
+struct pci_dev *pnv_pci_get_npu_dev(struct pci_dev *gpdev, int index);
 
 #endif // __UVM_ATS_IBM_H__

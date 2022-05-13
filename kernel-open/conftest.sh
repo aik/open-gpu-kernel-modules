@@ -1664,22 +1664,6 @@ compile_test() {
             fi
         ;;
 
-        pnv_pci_get_npu_dev)
-            #
-            # Determine if the pnv_pci_get_npu_dev function is present.
-            #
-            # Added by commit 5d2aa710e697 ("powerpc/powernv: Add support
-            # for Nvlink NPUs") in v4.5
-            #
-            CODE="
-            #include <linux/pci.h>
-            void conftest_pnv_pci_get_npu_dev() {
-                pnv_pci_get_npu_dev();
-            }"
-
-            compile_check_conftest "$CODE" "NV_PNV_PCI_GET_NPU_DEV_PRESENT" "" "functions"
-        ;;
-
         kernel_write)
             #
             # Determine if the function kernel_write() is present.

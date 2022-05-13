@@ -171,7 +171,6 @@ invalid_numa_config:
 
 void nv_init_ibmnpu_info(nv_state_t *nv)
 {
-#if defined(NV_PNV_PCI_GET_NPU_DEV_PRESENT)
     nv_linux_state_t *nvl = NV_GET_NVL_FROM_NV_STATE(nv);
     struct pci_dev *npu_dev = pnv_pci_get_npu_dev(nvl->pci_dev, 0);
     NvU8 dev_count;
@@ -230,7 +229,6 @@ void nv_init_ibmnpu_info(nv_state_t *nv)
     }
 
     nv_init_ibmnpu_numa_info(nv);
-#endif
 }
 
 void nv_destroy_ibmnpu_info(nv_state_t *nv)
